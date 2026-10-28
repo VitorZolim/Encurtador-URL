@@ -1,4 +1,5 @@
-﻿using EncurtadorUrl.Services;
+﻿using EncurtadorUrl.Models.DTOs;
+using EncurtadorUrl.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,19 @@ namespace EncurtadorUrl.Controllers
         public UrlController(IUrlShortService urlShortService)
         {
             _urlshortService = urlShortService;
+        }
+
+        [HttpPost("shorten")]
+        public async Task<IActionResult> ShortenUrl([FromBody] UrlRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Url) || !Uri.TryCreate(request.Url, UriKind.Absolute, out Uri? validatedUri))
+            {
+                return BadRequest("Formato de URL inválido.");
+            }
+
+            string shortCode = await _urlshortService.CreateShortUrlAsync(request.Url);
+
+            return Ok(new { Code = shortCode });
         }
     }
 }
