@@ -28,5 +28,19 @@ namespace EncurtadorUrl.Controllers
 
             return Ok(new { Code = shortCode });
         }
+
+        [HttpGet("code")]
+        public async Task<IActionResult> RedirectUrlOriginal(string code)
+        {
+            string? originalUrl = await _urlshortService.GetOriginalUrlAsync(code);
+
+            if (originalUrl == null)
+            {
+                return NotFound("Código de redirecionamento não encontrado.");
+            }
+
+            // Retorna status 302(Found) mudando o navegador para a página
+            return Redirect(originalUrl);
+        }
     }
 }

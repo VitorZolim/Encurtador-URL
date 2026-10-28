@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncurtadorUrl", "Encurtador
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfaceUrl", "InterfaceUrl\InterfaceUrl.csproj", "{92E56618-C411-4498-8A93-66F3991C36BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlShortenerTests", "UrlShortenerTests\UrlShortenerTests.csproj", "{79318B47-0C36-4415-A658-EEA141321AA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{92E56618-C411-4498-8A93-66F3991C36BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92E56618-C411-4498-8A93-66F3991C36BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92E56618-C411-4498-8A93-66F3991C36BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79318B47-0C36-4415-A658-EEA141321AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79318B47-0C36-4415-A658-EEA141321AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79318B47-0C36-4415-A658-EEA141321AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79318B47-0C36-4415-A658-EEA141321AA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -55,5 +55,18 @@ namespace EncurtadorUrl.Services
 
             return result;
         }
+
+        public async Task<string?> GetOriginalUrlAsync(string shortCode)
+        {
+            ShortenedUrl? shortenedUrl = await _context.Urls
+                                         .FirstOrDefaultAsync(s => s.ShortCode == shortCode);
+
+            if (shortenedUrl != null)
+            {
+                return shortenedUrl.OriginalUrl;
+            }
+
+            return null;
+        }
     }
 }
