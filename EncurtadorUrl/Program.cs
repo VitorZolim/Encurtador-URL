@@ -1,4 +1,5 @@
 using EncurtadorUrl.Context;
+using EncurtadorUrl.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddOpenApi();
 string sqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
                     options.UseSqlite(sqlConnection));
+
+builder.Services.AddScoped<IUrlShortService, UrlShortService>();
 
 var app = builder.Build();
 
