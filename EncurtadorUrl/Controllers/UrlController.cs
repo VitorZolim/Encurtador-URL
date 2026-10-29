@@ -31,7 +31,7 @@ namespace EncurtadorUrl.Controllers
             return Ok(new { Code = shortCode });
         }
 
-        [HttpGet("code")]
+        [HttpGet("{code}")]
         public async Task<IActionResult> RedirectUrlOriginal(string code)
         {
             string? originalUrl = await _urlshortService.GetOriginalUrlAsync(code);

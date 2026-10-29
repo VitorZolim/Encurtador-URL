@@ -1,7 +1,125 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.Web
+@rendermode InteractiveServer
+@inject HttpClient Http
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Encurtador de URL</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container mt-5 text-center">
+    <h1 class="mb-4">Encurtador de URL</h1>
 
-Welcome to your new app.
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="input-group input-group-lg mb-3">
+                <input type="text" class="form-control" placeholder="Cole sua URL aqui..." @bind="UrlOriginal" />
+                <button class="btn btn-primary" @onclick="EncurtarUrlAsync">Encurtar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bloco de Sucesso -->
+    @if (!string.IsNullOrEmpty(UrlEncurtada))
+    {
+        <div class="alert alert-success mt-4 p-4 shadow-sm">
+            <h5 class="alert-heading">Confirmado! Link Gerado:</h5>
+            <a href="@UrlEncurtada" target="_blank" class="fs-4 fw-bold text-decoration-none">@UrlEncurtada</a>
+        </div>
+    }
+
+    <!-- Bloco de Erro -->
+    @if (!string.IsNullOrEmpty(MensagemErro))
+    {
+        <div class="alert alert-danger mt-4">
+            @MensagemErro
+        </div>
+    }
+
+    @if (HistoricoUrls.Any())
+    {
+        <div class="mt-5 text-start">
+            <h3>Últimos Links Gerados</h3>
+            <ul class="list-group">
+                @foreach (var item in HistoricoUrls)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="text-truncate" style="max-width: 50%;">@item.Original</span>
+                        <a href="@item.Encurtada" target="_blank" class="fw-bold">@item.Encurtada</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
+
+@code {
+    // Estas propriedades armazenam o estado da tela (equivalente ao "estado" do React)
+    private string UrlOriginal { get; set; } = string.Empty;
+    private string UrlEncurtada { get; set; } = string.Empty;
+    private string MensagemErro { get; set; } = string.Empty;
+
+    private async Task EncurtarUrlAsync()
+    {
+        // Limpa mensagens anteriores
+        MensagemErro = string.Empty;
+        UrlEncurtada = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(UrlOriginal))
+        {
+            MensagemErro = "Por favor, insira uma URL válida.";
+            return;
+        }
+
+        // Monta o objeto com a mesma estrutura que o seu Controller espera receber
+        var request = new { url = UrlOriginal };
+
+        try
+        {
+            // O Blazor converte o objeto para JSON e faz o POST automaticamente
+            var response = await Http.PostAsJsonAsync("api/url/shorten", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Lê o JSON retornado pela API ({ "code": "1a" })
+                var resultado = await response.Content.ReadFromJsonAsync<UrlResponse>();
+
+                if (resultado != null)
+                {
+                    // Monta o link clicável direto para o seu endpoint de redirecionamento (GET)
+                    UrlEncurtada = $"https://localhost:7189/api/url/{resultado.Code}";
+                    UrlOriginal = string.Empty; // Limpa o input
+                }
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            {
+                MensagemErro = "Você enviou muitas requisições! Aguarde alguns segundos.";
+            }
+            else
+            {
+                MensagemErro = "Erro ao encurtar. Verifique o formato da URL.";
+            }
+        }
+        catch (Exception ex)
+        {
+            MensagemErro = $"Erro de comunicação com a API: {ex.Message}";
+        }
+    }
+
+    @code {
+    private List<ItemHistorico> HistoricoUrls { get; set; } = new();
+
+    // Dentro do método EncurtarUrlAsync, após receber o resultado com sucesso:
+    // HistoricoUrls.Insert(0, new ItemHistorico { Original = UrlOriginal, Encurtada = urlGerada });
+
+    public class ItemHistorico
+    {
+        public string Original { get; set; } = string.Empty;
+        public string Encurtada { get; set; } = string.Empty;
+    }
+}
+
+    // Classe auxiliar para mapear a resposta de sucesso da sua API
+    public class UrlResponse
+    {
+        public string Code { get; set; } = string.Empty;
+    }
+}
