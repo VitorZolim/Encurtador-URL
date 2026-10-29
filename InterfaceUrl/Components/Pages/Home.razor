@@ -33,22 +33,6 @@
             @MensagemErro
         </div>
     }
-
-    @if (HistoricoUrls.Any())
-    {
-        <div class="mt-5 text-start">
-            <h3>Últimos Links Gerados</h3>
-            <ul class="list-group">
-                @foreach (var item in HistoricoUrls)
-                {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="text-truncate" style="max-width: 50%;">@item.Original</span>
-                        <a href="@item.Encurtada" target="_blank" class="fw-bold">@item.Encurtada</a>
-                    </li>
-                }
-            </ul>
-        </div>
-    }
 </div>
 
 @code {
@@ -103,19 +87,6 @@
             MensagemErro = $"Erro de comunicação com a API: {ex.Message}";
         }
     }
-
-    @code {
-    private List<ItemHistorico> HistoricoUrls { get; set; } = new();
-
-    // Dentro do método EncurtarUrlAsync, após receber o resultado com sucesso:
-    // HistoricoUrls.Insert(0, new ItemHistorico { Original = UrlOriginal, Encurtada = urlGerada });
-
-    public class ItemHistorico
-    {
-        public string Original { get; set; } = string.Empty;
-        public string Encurtada { get; set; } = string.Empty;
-    }
-}
 
     // Classe auxiliar para mapear a resposta de sucesso da sua API
     public class UrlResponse
