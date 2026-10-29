@@ -2,6 +2,7 @@
 using EncurtadorUrl.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace EncurtadorUrl.Controllers
 {
@@ -17,6 +18,7 @@ namespace EncurtadorUrl.Controllers
         }
 
         [HttpPost("shorten")]
+        [EnableRateLimiting("fixo")]
         public async Task<IActionResult> ShortenUrl([FromBody] UrlRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Url) || !Uri.TryCreate(request.Url, UriKind.Absolute, out Uri? validatedUri))

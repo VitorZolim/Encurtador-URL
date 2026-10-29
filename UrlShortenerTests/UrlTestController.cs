@@ -31,7 +31,7 @@ namespace UrlShortenerTests
 
                 UrlRequest request = new UrlRequest
                 {
-                    Url = "https://github.com/Open4Community/assist-plugin"
+                    Url = "https://github.com/VitorZolim"
                 };
 
                 // Act
@@ -57,7 +57,7 @@ namespace UrlShortenerTests
                 UrlShortService service = new UrlShortService(context);
                 UrlController controller = new UrlController(service);
 
-                string originalUrl = "https://github.com/Open4Community";
+                string originalUrl = "https://github.com/VitorZolim";
 
                 // Inserimos um registro diretamente para preparar o estado do banco
                 ShortenedUrl novaUrl = new ShortenedUrl
